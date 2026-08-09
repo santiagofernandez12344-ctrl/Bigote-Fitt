@@ -24,7 +24,7 @@ const LS = {
    3) Project Settings → API → copiá "Project URL" y "anon public key" acá abajo
    La anon key es pública por diseño (no es un secreto), la protege el RLS
    que armamos en el SQL. ========================================== */
-const SUPABASE_URL = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtnc3V6dWN3dWZ1Y2R6bXNudWRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMTA1NzcsImV4cCI6MjEwMTg4NjU3N30.f9zXanwK08uV6Jwko2ERu5gUJJahjb3vS2F53bVQlYQ";       // ej: "https://abcdefgh.supabase.co"
+const SUPABASE_URL = "https://kgsuzucwufucdzmsnudd.supabase.co";       // ej: "https://abcdefgh.supabase.co"
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtnc3V6dWN3dWZ1Y2R6bXNudWRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMTA1NzcsImV4cCI6MjEwMTg4NjU3N30.f9zXanwK08uV6Jwko2ERu5gUJJahjb3vS2F53bVQlYQ";  // ej: "eyJhbGciOiJI..."
 
 const SB_CONFIGURED = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
