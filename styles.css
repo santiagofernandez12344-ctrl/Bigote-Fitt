@@ -151,6 +151,7 @@ main{padding:0 16px; max-width:640px; margin:0 auto;}
   font-size:13.5px;
   color:var(--text-dim);
   line-height:1.4;
+  white-space:pre-line;
 }
 .ex-notes.hidden{display:none;}
 .notes-toggle{
