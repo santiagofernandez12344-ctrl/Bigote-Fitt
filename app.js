@@ -24,8 +24,8 @@ const LS = {
    3) Project Settings → API → copiá "Project URL" y "anon public key" acá abajo
    La anon key es pública por diseño (no es un secreto), la protege el RLS
    que armamos en el SQL. ========================================== */
-const SUPABASE_URL = "https://kgsuzucwufucdzmsnudd.supabase.co";       // ej: "https://abcdefgh.supabase.co"
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtnc3V6dWN3dWZ1Y2R6bXNudWRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMTA1NzcsImV4cCI6MjEwMTg4NjU3N30.f9zXanwK08uV6Jwko2ERu5gUJJahjb3vS2F53bVQlYQ";  // ej: "eyJhbGciOiJI..."
+const SUPABASE_URL = "https://kgsuzucwufucdzmsnudd.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtnc3V6dWN3dWZ1Y2R6bXNudWRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMTA1NzcsImV4cCI6MjEwMTg4NjU3N30.f9zXanwK08uV6Jwko2ERu5gUJJahjb3vS2F53bVQlYQ";
 
 const SB_CONFIGURED = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
 
@@ -648,8 +648,27 @@ function renderAjustes() {
       try {
         const parsed = JSON.parse(reader.result);
         if (!parsed.weeks || !Array.isArray(parsed.weeks)) throw new Error("formato inválido");
-        setProgram(parsed);
-        toast("Programa importado ✅");
+
+        const current = getProgram();
+        parsed.weeks.forEach((w) => {
+          const idx = current.weeks.findIndex((cw) => cw.numero === w.numero);
+          if (idx >= 0) current.weeks[idx] = w;
+          else current.weeks.push(w);
+        });
+        current.weeks.sort((a, b) => a.numero - b.numero);
+        if (parsed.meta && parsed.meta.startDate) current.meta.startDate = parsed.meta.startDate;
+        setProgram(current);
+
+        if (Array.isArray(parsed.lifts) && parsed.lifts.length) {
+          const currentLifts = getLifts();
+          let changed = false;
+          parsed.lifts.forEach((l) => {
+            if (!currentLifts.some((cl) => cl.key === l.key)) { currentLifts.push(l); changed = true; }
+          });
+          if (changed) setLifts(currentLifts);
+        }
+
+        toast(`Semana(s) ${parsed.weeks.map(w=>w.numero).join(", ")} importada(s) ✅`);
         renderAjustes();
       } catch (err) {
         toast("El archivo no tiene el formato correcto");
